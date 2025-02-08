@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nas Ondas - Configuração</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f2f2f2;
+      }
+
+      .container {
+        max-width: 500px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+
+      p {
+        color: #666;
+        text-align: center;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      input {
+        margin-bottom: 10px;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      button {
+        background-color: #333;
+        border: none;
+        border-radius: 5px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 10px;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Configuração</h1>
+      <p>Seja bem-vindo ao sistema de configuração do Nas Ondas!</p>
+      <form id="configForm">
+        <input type="text" name="youtube1" placeholder="Youtube 01" />
+        <input type="text" name="youtube2" placeholder="Youtube 02" />
+        <input type="text" name="instagram1" placeholder="Instagram 01" />
+        <input type="text" name="instagram2" placeholder="Instagram 02" />
+        <input type="text" name="instagram3" placeholder="Instagram 03" />
+        <input type="text" name="instagram4" placeholder="Instagram 04" />
+        <button type="submit">Salvar</button>
+      </form>
+    </div>
+
+    <script>
+      const token = localStorage.getItem('token')
+      if (!token) {
+        window.location.href = 'login.html'
+      }
+
+      const configForm = document.getElementById('configForm')
+
+      configForm.addEventListener('submit', async e => {
+        e.preventDefault()
+
+        const formData = new FormData(configForm)
+        const configData = Object.fromEntries(formData.entries())
+
+        try {
+          const response = await fetch('http://localhost:3031/config', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(configData),
+          })
+
+          const result = await response.json()
+
+          if (response.ok) {
+            alert('Configurações salvas com sucesso!')
+          } else {
+            alert(result.error || 'Erro ao salvar as configurações.')
+          }
+        } catch (error) {
+          console.error('Erro:', error)
+          alert('Ocorreu um erro ao enviar as configurações.')
+        }
+      })
+    </script>
+  </body>
+</html>
