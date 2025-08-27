@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3031:3031"
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_PORT=${DB_PORT}
+      - SECRET_KEY=${SECRET_KEY}
+    restart: unless-stopped
+    networks:
+    - proxy
+
+networks:
+    proxy:
+        external: true

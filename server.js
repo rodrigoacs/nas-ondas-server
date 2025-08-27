@@ -3,9 +3,16 @@ import bodyParser from 'body-parser'
 import jwt from 'jsonwebtoken'
 import { query } from './database.js'
 import cors from 'cors'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
 const SECRET_KEY = process.env.SECRET_KEY
 const app = express()
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+app.use(express.static(path.join(__dirname)))
+
 app.use(bodyParser.json())
 app.use(cors())
 
